@@ -6,14 +6,22 @@ import pandas as pd
 import json
 from bs4 import BeautifulSoup
 
+'''Only use for testing new functions.
+Only return stats from one driver. 
+Not the definite version'''
+
+
 page = requests.get("https://www.statsf1.com/en/juan-manuel-fangio.aspx")
 soup = BeautifulSoup(page.content, 'html.parser')
 
+#Dictionary that saves all the stats.
 stats_dict = {}
 
+#Check if string has any digits.
 def contains_digits(s):
     return any(char.isdigit() for char in s)
 
+#Formating driver name from title tag.
 name = soup.find("title")
 stats = soup.find_all("div", class_='piloteitem')
 
@@ -25,10 +33,6 @@ name_string_splited = name_string_striped.split(str('•'))[0]
 
 name_formatted = " ".join([i.capitalize() for i in name_string_splited.split()])
 
-'''with open('stats.txt', 'a+') as f:
-    f.write('\n'+name_formatted+'\n')
-    f.close()
-'''
 stats_dict['Nombre'] = name_formatted
 
 champ = []
@@ -40,20 +44,10 @@ for champion in soup.find_all("div", class_='pilotechp'):
         champ.append(championship)
 
 champ_years = re.findall(r'\d+', str(champ))
-#print(len([i for i in champ_years if len(i)==4]))
 
-#print(champ_striped)
-#print(championships)
 stats_dict['Championships'] = str(len([i for i in champ_years if len(i)==4]))
 
-
-#print(len([i for i in champ_years if len(i)==4]))
-
-#print(champ_striped)
-#print(championships)
-
-
-
+#List to save the remaining stats. Just the first two rows.
 lista = []
 cont = 0
 for stat in stats:
@@ -70,32 +64,20 @@ for stat in stats:
     if cont == 2:
         break
 
+#From the previous list, create key, value pair and append to the dictionary.
 for i in lista:
     print(i +'\n')
     lista_stats = re.findall(r'[A-Za-z]+|\d+', i)
     print(lista_stats)
-    lista_final = []
     for i in range(0, len(lista_stats)+1):
         try:
             type(int(lista_stats[i])) == int
-            stat = lista_stats[i]+' '+lista_stats[i+1]
-            lista_final.append(stat)
             stats_dict[lista_stats[i+1]] = lista_stats[i]
         except:
             continue
     
-
+#Save dictionary into json file.
 with open('statsOneDriver.json', 'a+') as f:
     json.dump(stats_dict, f)
     f.write("\n")
     f.close()
-
-'''with open('stats.csv', 'a+') as csvfile:
-        writer = csv.DictWriter(csvfile)
-        writer.writeheader()
-        for data in dict:
-            writer.writerow(data)
-'''
-'''with open('stats.csv', 'a+') as f:
-    for key in stats_dict.keys():
-        f.write("%s,%s\n"%(key,stats_dict[key]))'''

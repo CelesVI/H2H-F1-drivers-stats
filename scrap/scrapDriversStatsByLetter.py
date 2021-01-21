@@ -7,7 +7,10 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 '''Saves a part of url to append later.
-    Get the main page and turno into soup object to scrap'''
+    Only use for testing new functions. 
+    Get the main page and turno into soup object to scrap
+    Testing for drivers with the same first letter in their surnames.
+    Not the definite version'''
 
 base_url = "https://www.statsf1.com"
 page = requests.get("https://www.statsf1.com/en/pilotes-f.aspx")
@@ -19,7 +22,7 @@ lista_dict = []
 #Get drivers name form the title tag.
 def getDriverName(soup):
 
-    #Param is a soup object with driver's stats.
+    #Formating driver name from title tag.
     name = soup.find("title")
 
     name_string = name.get_text()
@@ -85,10 +88,8 @@ def getDriverStats(soup):
             except:
                 continue
     return stats_dict
-    '''with open('stats.txt', 'a+') as f:
-        print(stats_dict, file=f)
-        f.close()'''
 
+#Check if string has any digits.
 def contains_digits(s):
     return any(char.isdigit() for char in s)
 
@@ -103,51 +104,23 @@ actual_links = []
 for i in links:
     if not contains_digits(i) and 'victoire' not in i:
         actual_links.append(base_url+i)
-#print(actual_links)
+
 
 #Iterating over links and write the stats in a file.
 for i in actual_links:
     page = requests.get(i)
     soup = BeautifulSoup(page.content, 'html.parser')
+
+    #Soup object as param.
     full_stat = getDriverStats(soup)
-    '''with open('statsDriversByLetters.txt', 'a+') as f:
-        print(full_stat, file=f)
-        f.close()'''
-    '''with open('statsDriversByLetters.json', 'a+') as f:
-        json.dump(full_stat, f)
-        f.write('\n')
-        f.close()'''
     lista_dict.append(full_stat)
 
-#print(lista_dict)
-
+#Create a dataframe from list of dictionaries.
 df = pd.DataFrame.from_dict(lista_dict)
 
-df.to_csv('scrapDriversStatsByLetter.csv')
-df.to_excel('scrapDriversStatsByLetter.xlsx')
+#Save the just-created dataframe.
+df.to_csv('scrap/scrapDriversStatsByLetter.csv')
+df.to_excel('scrap/scrapDriversStatsByLetter.xlsx')
+
+#Print to check if everything went well.
 print(df.head(50))
-
-
-'''with open('statsDriversLetters.json', 'a+') as f:
-    for i in lista_dict:
-        json.dump(i, f)
-        f.write("\n")
-        f.close()
-'''
-
-
-'''with open('stats.txt', 'a+') as f:
-    print(stats_dict, file=f)
-    f.close()
-'''
-'''with open('stats.csv', 'a+') as csvfile:
-        writer = csv.DictWriter(csvfile)
-        writer.writeheader()
-        for data in dict:
-            writer.writerow(data)
-'''
-'''with open('stats.csv', 'a+') as f:
-    for key in stats_dict.keys():
-        f.write("%s,%s\n"%(key,stats_dict[key]))'''
-
-
