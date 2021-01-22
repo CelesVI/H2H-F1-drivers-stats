@@ -18,14 +18,21 @@ data = data.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
 #Get drivers's name.
 list_drivers = data['Nombre'].tolist()
 
+#Add lables.
+label1 = tk.Label(root, text="Driver 1").place(x=97, y=30)
+#label1.grid(row=0,column=0, padx=100, pady=50)
+
+label2 = tk.Label(root, text="Driver 2").place(x=540, y=30)
+#label2.grid(row=0,column=0, padx=200, pady=50)
+
 #Set list to select drivers.
 combo1 = ttk.Combobox(root, value=list_drivers)
 combo1.current(0)
-combo1.grid(row=0,column=40, padx=2, pady=2)
+combo1.grid(row=0,column=0, padx=100, pady=75)
 
 combo2 = ttk.Combobox(root, value=list_drivers)
-combo2.current(100)
-combo2.grid(row=0,column=60, padx=2, pady=2)
+combo2.current(1)
+combo2.grid(row=0,column=1, padx=200, pady=75)
 
 def getGraph():
     #Take the selected drivers.
@@ -66,6 +73,8 @@ def getGraph():
     plt.yticks(y_pos+width/2, col)
     plt.legend()
 
+    #plt.figure(figsize=(10,10))
+
     #Adjuste view.
     plt.tight_layout()
 
@@ -73,6 +82,6 @@ def getGraph():
     plt.show()
 
 #Button to trigger graph plotting.
-button = tk.Button(root, text="Compare", command=getGraph).place(x=60, y=300)
+button = tk.Button(root, text="Compare", command=getGraph).place(x=350, y=100)
 
 root.mainloop()
