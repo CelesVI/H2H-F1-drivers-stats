@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import ttk
 import pandas as pd
@@ -8,6 +10,9 @@ import numpy as np
 root = tk.Tk()
 root.title('F1 show stats')
 root.geometry('800x600')
+
+#Testing global canvas.
+global canvas
 
 #Open csv
 data = pd.read_csv('dataframe/driversDataFrame3.csv')
@@ -19,22 +24,28 @@ data = data.drop(columns=['Unnamed: 0', 'Unnamed: 0.1'])
 list_drivers = data['Nombre'].tolist()
 
 #Add lables.
-label1 = tk.Label(root, text="Driver 1").place(x=97, y=30)
-#label1.grid(row=0,column=0, padx=100, pady=50)
+label1 = tk.Label(root, text="Driver 1").place(x=275, y=0)
 
-label2 = tk.Label(root, text="Driver 2").place(x=540, y=30)
-#label2.grid(row=0,column=0, padx=200, pady=50)
+label2 = tk.Label(root, text="Driver 2").place(x=275, y=20)
 
 #Set list to select drivers.
 combo1 = ttk.Combobox(root, value=list_drivers)
 combo1.current(0)
-combo1.grid(row=0,column=0, padx=100, pady=75)
+#combo1.grid(row=0,column=0, padx=100, pady=75)
+combo1.place()
+combo1.pack()
 
 combo2 = ttk.Combobox(root, value=list_drivers)
 combo2.current(1)
-combo2.grid(row=0,column=1, padx=200, pady=75)
+#combo2.grid(row=0,column=1, padx=200, pady=75)
+combo2.place()
+combo2.pack()
 
 def getGraph():
+    
+    fig = Figure(figsize=(6,5), dpi=80)
+    plt = fig.add_subplot(111)
+    
     #Take the selected drivers.
     name1 = combo1.get()
     name2 = combo2.get()
@@ -70,18 +81,36 @@ def getGraph():
         plt.text(v, i+width, " "+str(v), color='red', va='center')
 
     #Positionate labels.
-    plt.yticks(y_pos+width/2, col)
+    plt.set_yticks(y_pos+width/2)
+    plt.set_yticklabels((col))
     plt.legend()
 
-    #plt.figure(figsize=(10,10))
-
+    #Create a canvas to draw the plot.
+    canvas = FigureCanvasTkAgg(fig, master = root)
+    canvas.draw() 
+  
+    #Place the canvas on the Tkinter window 
+    canvas.get_tk_widget().pack(fill=tk.BOTH, side=tk.BOTTOM) 
+  
+    #Create the Matplotlib toolbar 
+    toolbar = NavigationToolbar2Tk(canvas, root) 
+    toolbar.update() 
+  
+    #Place the toolbar on the Tkinter window 
+    canvas.get_tk_widget().pack() 
+    
     #Adjuste view.
-    plt.tight_layout()
+    #plt.tight_layout()
 
     #Show plot.
-    plt.show()
+    #plt.show()
+
+def clearGraph():
+    #canvas.get_tk_widget().pack_forget()
+    root.update()
 
 #Button to trigger graph plotting.
-button = tk.Button(root, text="Compare", command=getGraph).place(x=350, y=100)
+button1 = tk.Button(master=root, text="Compare", command=getGraph).place(x=300, y=100)
+button2 = tk.Button(master=root, text="Clear", command=clearGraph).place(x=400, y=100)
 
 root.mainloop()
