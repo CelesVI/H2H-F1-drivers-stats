@@ -8,7 +8,7 @@ import numpy as np
 
 #Create window.
 root = tk.Tk()
-root.title('F1 show stats')
+root.title('F1 H2H drivers')
 root.geometry('800x600')
 
 #Add image background.
@@ -56,8 +56,7 @@ def getGraph():
 
     #Destroy previous graph
     if canvas != None and toolbar != None:
-        canvas.get_tk_widget().pack_forget()
-        toolbar.destroy()
+        clearGraph()
 
     #Create Figure and subplot.
     fig = Figure(figsize=(6,5), dpi=80)
