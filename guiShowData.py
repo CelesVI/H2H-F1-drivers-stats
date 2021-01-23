@@ -11,8 +11,14 @@ root = tk.Tk()
 root.title('F1 show stats')
 root.geometry('800x600')
 
+#Add image background.
+backgroud_image = tk.PhotoImage(file='background/f1logo.png')
+backgroud_label = tk.Label(root, image=backgroud_image)
+backgroud_label.place(relwidth=1, relheight=1)
+
 #Testing global canvas.
-global canvas
+canvas = None
+toolbar = None
 
 #Open csv
 data = pd.read_csv('dataframe/driversDataFrame3.csv')
@@ -25,24 +31,35 @@ list_drivers = data['Nombre'].tolist()
 
 #Add lables.
 label1 = tk.Label(root, text="Driver 1").place(x=275, y=0)
-
 label2 = tk.Label(root, text="Driver 2").place(x=275, y=20)
 
 #Set list to select drivers.
 combo1 = ttk.Combobox(root, value=list_drivers)
 combo1.current(0)
-#combo1.grid(row=0,column=0, padx=100, pady=75)
 combo1.place()
 combo1.pack()
 
 combo2 = ttk.Combobox(root, value=list_drivers)
 combo2.current(1)
-#combo2.grid(row=0,column=1, padx=200, pady=75)
 combo2.place()
 combo2.pack()
 
+def clearGraph():
+    #Destroy previous graph
+    canvas.get_tk_widget().pack_forget()
+    toolbar.destroy()
+
 def getGraph():
-    
+    #Call the global variable.
+    global canvas
+    global toolbar
+
+    #Destroy previous graph
+    if canvas != None and toolbar != None:
+        canvas.get_tk_widget().pack_forget()
+        toolbar.destroy()
+
+    #Create Figure and subplot.
     fig = Figure(figsize=(6,5), dpi=80)
     plt = fig.add_subplot(111)
     
@@ -103,11 +120,7 @@ def getGraph():
     #plt.tight_layout()
 
     #Show plot.
-    #plt.show()
-
-def clearGraph():
-    #canvas.get_tk_widget().pack_forget()
-    root.update()
+    #plt.show() 
 
 #Button to trigger graph plotting.
 button1 = tk.Button(master=root, text="Compare", command=getGraph).place(x=300, y=100)
