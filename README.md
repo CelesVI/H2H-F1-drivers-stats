@@ -23,7 +23,7 @@ This app allow you compare stats like race, wins, championships, etc between dri
 #Example
 
 Select two drivers from respectives list.
-![Algorithm schema](./examples/example1.png)
+![Algorithm schema](./examples/example2.png)
 
 Press compare to show thier stats. Press clear to vanish the current graph.
-![Algorithm schema](./examples/example2.png)
+![Algorithm schema](./examples/example1.png)
