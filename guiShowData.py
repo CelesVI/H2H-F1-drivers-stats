@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.animation import FuncAnimation, writers
 import tkinter as tk
 from tkinter import ttk
 import pandas as pd
@@ -46,8 +47,10 @@ combo2.pack()
 
 def clearGraph():
     #Destroy previous graph
-    canvas.get_tk_widget().pack_forget()
-    toolbar.destroy()
+    if canvas != None and toolbar != None:
+        toolbar.pack_forget()
+        canvas.get_tk_widget().pack_forget()
+    
 
 def getGraph():
     #Call the global variable.
@@ -118,8 +121,11 @@ def getGraph():
     #Adjuste view.
     #plt.tight_layout()
 
+    animation = FuncAnimation(fig, canvas,
+                          interval = 50)
+
     #Show plot.
-    #plt.show() 
+    plt.show() 
 
 #Button to trigger graph plotting.
 button1 = tk.Button(master=root, text="Compare", command=getGraph).place(x=300, y=100)
