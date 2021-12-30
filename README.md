@@ -2,9 +2,9 @@
 A simple H2H F1 drivers stats app than compare two drivers. It shows stats like races, wins, pole postions, etc. 
 
 ## Table of contents
-* [General info](# General-info)
-* [Technologies](# Technologies)
-* [Example](# Example)
+* [General info](#General-info)
+* [Technologies](#Technologies)
+* [Example](#Example)
 
 # General info
 Created with the purpose to learn web scraping, data analysis and gui, i developed to this app to merge many of these goals.
