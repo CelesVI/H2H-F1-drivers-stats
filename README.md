@@ -1,5 +1,5 @@
 # H2H-F1-drivers-stats
-A simple H2H F1 drivers stats app than compare two drivers. It shows stats like races, wins, pole postions, etc. 
+A simple H2H F1 drivers stats app than compare two drivers. It shows stats such as races, wins, pole postions, etc. 
 
 ## Table of contents
 * [General info](#General-info)
